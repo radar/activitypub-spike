@@ -156,7 +156,7 @@ Style/TrailingCommaInHashLiteral:
 # hash/array literal commas is not as strong and we will instead never have
 # trailing commas in method calls.
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: no_comma
+  EnforcedStyleForMultiline: consistent_comma
 
 # The "new_line" style for this is close to what we want, but it behaves poorly
 # in cases where an argument is an array or hash and is spread across multiple
