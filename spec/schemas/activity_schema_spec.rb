@@ -1,29 +1,54 @@
 require 'rails_helper'
 
-RSpec.describe ActivitySchema do
-  context "with a valid activity" do
-    let(:valid_activity) do
-      # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
-      {
-        "@context": "https://www.w3.org/ns/activitystreams",
-        "summary": "Sally created a note",
-        "type": "Create",
-        "actor": {
-          "type": "User",
-          "name": "ryan",
-        },
-        "object": {
-          "type": "Message",
-          "content": "This is a simple message",
-        },
-        "published": Time.current.to_s,
-        "to": "https://www.w3.org/ns/activitystreams#Public",
-      }
+RSpec.describe "ActivitySchema" do
+  context "valid cases" do
+    context "with actor hash" do
+      let(:valid_activity) do
+        # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
+        {
+          "@context": "https://www.w3.org/ns/activitystreams",
+          "summary": "Sally created a note",
+          "type": "Create",
+          "actor": {
+            "type": "User",
+            "name": "ryan",
+          },
+          "object": {
+            "type": "Message",
+            "content": "This is a simple message",
+          },
+          "published": Time.current.to_s,
+          "to": "https://www.w3.org/ns/activitystreams#Public",
+        }
+      end
+
+      it "validates successfully" do
+        result = ActivitySchema.(valid_activity)
+        expect(result).to be_success
+      end
     end
 
-    it "validates successfully" do
-      result = ActivitySchema.(valid_activity)
-      expect(result).to be_success
+    context "with actor name" do
+      let(:valid_activity) do
+        # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
+        {
+          "@context": "https://www.w3.org/ns/activitystreams",
+          "summary": "Sally created a note",
+          "type": "Create",
+          "actor": "ryan",
+          "object": {
+            "type": "Message",
+            "content": "This is a simple message",
+          },
+          "published": Time.current.to_s,
+          "to": "https://www.w3.org/ns/activitystreams#Public",
+        }
+      end
+
+      it "validates successfully" do
+        result = ActivitySchema.(valid_activity)
+        expect(result).to be_success
+      end
     end
   end
 

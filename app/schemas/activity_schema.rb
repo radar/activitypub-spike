@@ -6,5 +6,5 @@ end
 
 ActivitySchema = Dry::Schema.Params do
   required(:@context) { eql?("https://www.w3.org/ns/activitystreams") }
-  required(:actor).hash(Actor)
+  required(:actor) { str? | (hash? & schema(Actor)) }
 end
