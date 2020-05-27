@@ -15,11 +15,9 @@ RSpec.describe 'POST /:user/outbox, Update Activity' do
     end
 
     let(:published) { Time.current }
-    let(:actor) { "radar" }
-
     let(:new_content) { "This is the new content for the message" }
+
     let(:activity) do
-      # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
       {
         "@context": "https://www.w3.org/ns/activitystreams",
         "summary": "Radar updated a message",
@@ -38,18 +36,35 @@ RSpec.describe 'POST /:user/outbox, Update Activity' do
       }
     end
 
-    it "updates the existing message" do
-      post_message
+    context "when the user owns the message" do
+      let(:actor) { "radar" }
 
-      expect(radar.sent_messages.count).to eq(1)
-      sent_message = radar.sent_messages.first
-      expect(sent_message.content).to eq(new_content)
+      it "updates the existing message" do
+        post_message
 
-      expect(mdhoad.received_messages.count).to eq(1)
-      received_message = mdhoad.received_messages.first
-      expect(received_message.content).to eq(new_content)
+        expect(radar.sent_messages.count).to eq(1)
+        sent_message = radar.sent_messages.first
+        expect(sent_message.content).to eq(new_content)
+
+        expect(mdhoad.received_messages.count).to eq(1)
+        received_message = mdhoad.received_messages.first
+        expect(received_message.content).to eq(new_content)
+      end
+    end
+
+    context "when the user does not own the message" do
+      let(:actor) { "mdhoad" }
+      it "the message is not updated" do
+        post_message
+
+        expect(radar.sent_messages.count).to eq(1)
+        sent_message = radar.sent_messages.first
+        expect(sent_message.content).to eq("to be updated")
+
+        expect(mdhoad.received_messages.count).to eq(1)
+        received_message = mdhoad.received_messages.first
+        expect(received_message.content).to eq("to be updated")
+      end
     end
   end
-
-  it "users cannot update a sent message that do not belong to them"
 end

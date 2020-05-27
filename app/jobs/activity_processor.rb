@@ -38,6 +38,8 @@ class ActivityProcessor
     updated_at = activity.published
 
     sent_message = GlobalID::Locator.locate(activity.object.id)
+    return if sent_message.from != actor
+
     sent_message.update(
       updated_at: updated_at,
       content: content,
