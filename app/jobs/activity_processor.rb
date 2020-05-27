@@ -2,17 +2,16 @@ class ActivityProcessor
   include Sidekiq::Worker
 
   def perform(activity)
-    activity = JSON.parse(activity)
-    actor = activity.dig("actor", "name")
+    activity = Activity.new(JSON.parse(activity))
 
-    actor = User.find_by(username: actor)
-    content = activity.dig("object", "content")
-    published = activity["published"]
+    actor = User.find_by(username: activity.actor_name)
+    content = activity.object.content
+    published = activity.published
 
     actor.sent_messages.create!(
       created_at: published,
       content: content,
-      to: Array.wrap(activity["to"])
+      to: activity.to,
     )
 
     message = {

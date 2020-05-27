@@ -23,7 +23,7 @@ RSpec.describe 'POST /:user/outbox, Create Activity' do
       # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
       {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "summary": "Sally created a note",
+        "summary": "Radar created a note",
         "type": "Create",
         "actor": {
           "type": "User",

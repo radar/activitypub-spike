@@ -20,6 +20,7 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'sidekiq'
 
+gem 'dry-struct'
 gem 'dry-schema'
 
 # Reduces boot times through caching; required in config/boot.rb
