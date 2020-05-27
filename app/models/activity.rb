@@ -12,6 +12,7 @@ end
 class ActivityObject < Dry::Struct
   transform_keys(&:to_sym)
 
+  attribute? :id, Types::String
   attribute :content, Types::String
 end
 
@@ -22,6 +23,7 @@ class Activity < Dry::Struct
     actor.is_a?(Actor) ? actor.name : actor
   end
 
+  attribute :type, Types::String
   attribute :actor, Types::String | Actor
   attribute :object, ActivityObject
   attribute :published, Types::JSON::DateTime

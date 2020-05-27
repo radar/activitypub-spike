@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_234350) do
+ActiveRecord::Schema.define(version: 2020_05_27_063910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,9 @@ ActiveRecord::Schema.define(version: 2020_05_26_234350) do
     t.text "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "source_id", null: false
     t.index ["from_id"], name: "index_received_messages_on_from_id"
+    t.index ["source_id"], name: "index_received_messages_on_source_id"
     t.index ["to_id"], name: "index_received_messages_on_to_id"
   end
 
@@ -48,6 +50,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_234350) do
   end
 
   add_foreign_key "followings", "users", column: "follower_id"
+  add_foreign_key "received_messages", "sent_messages", column: "source_id"
   add_foreign_key "received_messages", "users", column: "from_id"
   add_foreign_key "received_messages", "users", column: "to_id"
   add_foreign_key "sent_messages", "users", column: "from_id"
