@@ -41,6 +41,8 @@ RSpec.describe 'POST /:user/outbox, Create Activity' do
     it "sends a message to radar's followers" do
       post_message
 
+      expect(response).to have_http_status(200)
+
       expect(radar.sent_messages.count).to eq(1)
       expect(mdhoad.received_messages.count).to eq(1)
       expect(sharon.received_messages.count).to eq(1)
@@ -60,6 +62,30 @@ RSpec.describe 'POST /:user/outbox, Create Activity' do
 
         expect(response.status).to eq(404)
       end
+    end
+  end
+
+  context "with an unwrapped message" do
+    let(:radar) { FactoryBot.create(:user, username: "radar") }
+    let(:mdhoad) { FactoryBot.create(:user, username: "mdhoad") }
+
+    let(:activity) do
+      # Example 2: https://www.w3.org/TR/activitypub/#create-activity-outbox
+      {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "Message",
+        "to": [mdhoad.to_global_id.to_s],
+        "attributedTo": radar.to_global_id.to_s,
+        "content": "Say, did you finish reading that book I lent you?",
+      }
+    end
+
+    it "sends a message from radar to mdhoad" do
+      post_message
+      expect(response).to have_http_status(200)
+
+      expect(radar.sent_messages.count).to eq(1)
+      expect(mdhoad.received_messages.count).to eq(1)
     end
   end
 

@@ -2,21 +2,33 @@ class UsersController < ApplicationController
   def outbox
     activity_params = params[:activity].permit!.to_h
 
-    result = ActivitySchema.(activity_params)
+    schema = find_schema(activity_params[:type])
+    result = schema.(activity_params)
 
     if result.failure?
       return render json: result.errors(full: true).to_h, status: 422
     end
 
-    activity = Activity.new(activity_params)
+    activity = if activity_params[:type] == "Message"
+      ActivityWrapper::Message.wrap(activity_params)
+    else
+      Activity.new(activity_params)
+    end
 
-    actor = User.find_by(username: activity.actor_name)
-
-    unless actor
+    unless activity.actor
       return head :not_found
     end
 
-    ActivityProcessor.perform_async(params[:activity].to_json)
+    ActivityProcessor.perform_async(activity.to_json)
     head :ok
+  end
+
+  private def find_schema(type)
+    case type
+    when "Message"
+      MessageSchema
+    else
+      ActivitySchema
+    end
   end
 end

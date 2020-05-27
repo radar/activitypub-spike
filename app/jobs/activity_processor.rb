@@ -13,11 +13,10 @@ class ActivityProcessor
   end
 
   def handle_create_activity(activity)
-    actor = User.find_by(username: activity.actor_name)
     content = activity.object.content
     published = activity.published
 
-    source = actor.sent_messages.create!(
+    source = activity.actor.sent_messages.create!(
       created_at: published,
       content: content,
       to: activity.to,
@@ -25,15 +24,15 @@ class ActivityProcessor
 
     message = {
       created_at: published,
-      from_id: actor.id,
+      from_id: activity.actor.id,
       content: content,
     }
 
-    FanoutMessageWorker.perform_async(actor.id, source.id, message)
+    FanoutCreateMessageWorker.perform_async(activity.to, activity.actor.id, source.id, message)
   end
 
   def handle_update_activity(activity)
-    actor = User.find_by(username: activity.actor_name)
+    actor = activity.actor
     content = activity.object.content
     updated_at = activity.published
 
