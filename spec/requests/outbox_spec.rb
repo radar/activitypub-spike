@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'POST /:user/outbox' do
+RSpec.describe 'POST /:user/outbox, Create Activity' do
   def post_message
     headers = { "Content-Type" => "application/json" }
     post "/radar/outbox", params: { activity: activity }.to_json, headers: headers
