@@ -11,6 +11,7 @@ RSpec.describe 'POST /:user/outbox' do
   end
 
   let(:published) { Time.current }
+  let(:actor) { "radar" }
 
   let(:activity) do
     # Example 15: https://www.w3.org/TR/activitystreams-vocabulary/#dfn-create
@@ -20,7 +21,7 @@ RSpec.describe 'POST /:user/outbox' do
       "type": "Create",
       "actor": {
         "type": "User",
-        "name": "radar",
+        "name": "#{actor}",
       },
       "object": {
         "type": "Message",
@@ -49,4 +50,16 @@ RSpec.describe 'POST /:user/outbox' do
 
     expect(radar.sent_messages.first.created_at).to be_within(0.01).of(published)
   end
+
+  context "handles case where actor does not exist" do
+    let(:actor) { "ella" }
+
+    it "returns a 404" do
+      post_message
+
+      expect(response.status).to eq(404)
+    end
+  end
+
+  it "handles malformed activities"
 end
