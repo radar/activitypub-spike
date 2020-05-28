@@ -14,7 +14,7 @@ module ActivityWrapper
         object: {
           type: "Message",
           attributedTo: params[:attributedTo],
-          to: params[:to],
+          to: Array.wrap(params[:to]),
           content: params[:content]
         }
       )

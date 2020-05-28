@@ -6,8 +6,6 @@ class FanoutCreateMessageWorker
   def perform(to, actor_id, source_id, message)
     actor = User.find(actor_id)
 
-    to = Array.wrap(to)
-
     if to.include?(PUBLIC_ADDRESS)
       actor.followers.find_each do |follower|
         ReceiveMessageWorker.perform_async(source_id, follower.id, actor_id, message)
