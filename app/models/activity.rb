@@ -6,7 +6,7 @@ class Actor < Dry::Struct
   transform_keys(&:to_sym)
 
   attribute? :id, Types::String
-  attribute :type, Types::String
+  attribute? :type, Types::String
   attribute :name, Types::String
 end
 
@@ -15,6 +15,9 @@ class ActivityObject < Dry::Struct
 
   attribute? :id, Types::String
   attribute :content, Types::String
+  attribute? :type, Types::String
+  attribute? :to, Types::String | Types::Array
+  attribute? :attributedTo, Types::String | Types::Array
 end
 
 class Activity < Dry::Struct

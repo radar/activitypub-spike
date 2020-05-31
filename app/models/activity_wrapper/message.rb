@@ -8,12 +8,11 @@ module ActivityWrapper
         to: params[:to],
         actor: {
           id: params[:attributedTo],
-          type: "User",
           name: user.username,
         },
         object: {
-          type: "Message",
-          attributedTo: params[:attributedTo],
+          type: self.name.demodulize,
+          attributedTo: Array.wrap(params[:attributedTo]),
           to: Array.wrap(params[:to]),
           content: params[:content]
         }
