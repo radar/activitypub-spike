@@ -1,7 +1,7 @@
 require 'dry/schema'
 
 ActorSchema = Dry::Schema.Params do
-  required(:type) { eql?("User") }
+  required(:type).value(included_in?: %w[Application Group Organization Person Service])
   required(:name) { str? }
 end
 

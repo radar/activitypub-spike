@@ -10,7 +10,7 @@ RSpec.describe "ActivitySchema" do
           "summary": "Sally created a note",
           "type": "Create",
           "actor": {
-            "type": "User",
+            "type": "Person",
             "name": "ryan",
           },
           "object": {
@@ -60,7 +60,7 @@ RSpec.describe "ActivitySchema" do
             "summary": "Sally created a note",
             "type": "Create",
             "actor": {
-              "type": "User",
+              "type": "Person",
               "name": "ryan",
             },
             "object": {
@@ -86,7 +86,7 @@ RSpec.describe "ActivitySchema" do
             "summary": "Sally created a note",
             "type": "Create",
             "actor": {
-              "type": "User",
+              "type": "Person",
               "name": "ryan",
             },
             "object": {
@@ -149,7 +149,7 @@ RSpec.describe "ActivitySchema" do
 
         it "is invalid" do
           result = ActivitySchema.(invalid_activity)
-          expect(result.errors[:actor][:type]).to eq(["must be equal to User"])
+          expect(result.errors[:actor][:type]).to eq(["must be one of: Application, Group, Organization, Person, Service"])
         end
       end
     end

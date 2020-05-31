@@ -26,7 +26,7 @@ RSpec.describe 'POST /:user/outbox, Create Activity' do
         "summary": "Radar created a note",
         "type": "Create",
         "actor": {
-          "type": "User",
+          "type": "Person",
           "name": "#{actor}",
         },
         "object": {
