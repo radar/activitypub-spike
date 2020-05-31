@@ -23,7 +23,7 @@ RSpec.describe 'POST /:user/outbox, Update Activity' do
         "summary": "Radar updated a message",
         "type": "Update",
         "actor": {
-          "type": "User",
+          "type": "Person",
           "name": "#{actor}",
         },
         "object": {
